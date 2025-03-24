@@ -1,74 +1,72 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+// app/(tabs)/index.tsx
+import React, { useState } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import Swiper from 'react-native-deck-swiper';
+import { allMovies } from '../../constants/data';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+export function HomeScreen() {
+  const [cards, setCards] = useState(allMovies);
+  const [swipedAll, setSwipedAll] = useState(false);
 
-export default function HomeScreen() {
+  const onSwipedAllCards = () => {
+    setSwipedAll(true);
+  };
+
+  const onSwipedRight = (cardIndex: number) => {
+    console.log('Liked: ', cards[cardIndex].title);
+    // Save logic if needed (e.g., to a backend or local storage)
+  };
+
+  const onSwipedLeft = (cardIndex: number) => {
+    console.log('Disliked: ', cards[cardIndex].title);
+  };
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Hello world!</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <View style={styles.container}>
+      <Text style={styles.header}>Home (Swipe Screen)</Text>
+      <Swiper
+        cards={cards}
+        renderCard={(card) => {
+          if (!card) return <View />;
+          return (
+            <View style={styles.card}>
+              <Text style={styles.title}>{card.title}</Text>
+            </View>
+          );
+        }}
+        onSwipedRight={onSwipedRight}
+        onSwipedLeft={onSwipedLeft}
+        onSwipedAll={onSwipedAllCards}
+        stackSize={3}
+        backgroundColor="transparent"
+      />
+      {swipedAll && <Text>You have swiped all movies!</Text>}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
+  container: {
+    flex: 1,
+    paddingTop: 60,
     alignItems: 'center',
-    gap: 8,
+    backgroundColor: '#fff',
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  header: {
+    fontSize: 20,
+    marginBottom: 20,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  card: {
+    width: 300,
+    height: 400,
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: '#ccc',
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 22,
   },
 });
