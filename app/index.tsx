@@ -3,31 +3,17 @@ import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 
-export default function WelcomeScreen() {
+export default function HomeScreen() {
   const router = useRouter();
-
-  const navigateToMovieApp = () => {
-    // Navigates to the movie app (which is now at /movie)
-    router.push('/movie');
-  };
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome to FilmMatchApp!</Text>
-      <Button title="Start Movie App" onPress={navigateToMovieApp} />
+      <Button title="Go to App" onPress={() => router.push('/(tabs)')} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 20,
-  },
+  container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  title: { fontSize: 24, marginBottom: 20 },
 });
